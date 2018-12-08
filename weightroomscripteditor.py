@@ -53,7 +53,6 @@ class WeightRoomScriptEditor(tk.Frame):
 
         self.refresh_sets_lb()
 
-
     def add_set(self, length):
         curse_selection = self.exercises_or_sets_lb.curselection()
         if curse_selection:
@@ -102,6 +101,7 @@ class WeightRoomScriptEditor(tk.Frame):
                 self.exercises_or_sets_lb.insert(tk.END, f'Set {current_set}       {formatted_time}')
 
         self.total_length_lbl.configure(text=f'Total Length: {seconds_to_minutes_seconds_string(total_time)}')
+
 
 
 

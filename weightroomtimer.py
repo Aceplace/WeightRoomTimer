@@ -69,6 +69,12 @@ class WeightRoomTimer(tk.Frame):
         #this call back
         self.after(1000, self.on_second)
 
+    def load_script(self, script):
+        self.script = script
+        self.current_set = 0
+        self.is_playing = False
+        self.set_period_start()
+
     def on_second(self):
         #decrement the time and check on end of set
         if self.is_playing:
