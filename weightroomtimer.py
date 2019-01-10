@@ -59,6 +59,7 @@ class WeightRoomTimer(tk.Frame):
         #initialize the starting values and sizes of the label widgets
         self.interval_timer_slider.configure(to_=self.time_remaining_in_set - 1)
         self.interval_timer_slider.set(0)
+        self.initialize_set()
 
         #this call back
         self.after(1000, self.on_second)
@@ -67,7 +68,7 @@ class WeightRoomTimer(tk.Frame):
         self.script = script
         self.current_set = 0
         self.is_playing = False
-        self.set_period_start()
+        self.initialize_set()
 
     def on_second(self):
         #decrement the time and check on end of set
@@ -88,11 +89,11 @@ class WeightRoomTimer(tk.Frame):
         #callback will invoke itself repeatadely so that it keeps happening
         self.after(1000, self.on_second)
 
-    def set_period_start(self):
+    def initialize_set(self):
         self.time_remaining_in_set = self.script[self.current_set]['length']
         self.interval_timer_slider.configure(to_=self.time_remaining_in_set - 1)
-        self.exercise_lbl.configure(text='Exr: ' + str(self.script[self.current_set]['exercise_number']))
-        self.set_lbl.configure(text='Set: ' + str(self.script[self.current_set]['set_number']))
+        self.exercise_lbl.configure(text=self.script[self.current_set]['exercise_label'])
+        self.set_lbl.configure(text=self.script[self.current_set]['set_label'])
 
         self.time_lbl.configure(text=seconds_to_minutes_seconds_string(self.time_remaining_in_set))
         self.interval_timer_slider.configure(state=tk.NORMAL)
@@ -115,13 +116,13 @@ class WeightRoomTimer(tk.Frame):
         self.current_set -= 1
         if self.current_set < 0:
             self.current_set = len(self.script) - 1
-        self.set_period_start()
+        self.initialize_set()
 
     def next_period(self):
         self.current_set += 1
         if self.current_set >= len(self.script):
             self.current_set = 0
-        self.set_period_start()
+        self.initialize_set()
 
     def decrease_exercise_set_lbl_size(self):
         self.exercise_set_lbl_size -= 10
@@ -157,25 +158,25 @@ class WeightRoomTimer(tk.Frame):
 
 if __name__=='__main__':
     root = tk.Tk()
-
     script = [
-        {'exercise_number':1, 'set_number':1, 'length':90},
-        {'exercise_number': 1, 'set_number': 2, 'length': 90},
-        {'exercise_number': 1, 'set_number': 3, 'length': 90},
-        {'exercise_number': 2, 'set_number': 1, 'length': 90},
-        {'exercise_number': 2, 'set_number': 2, 'length': 60},
-        {'exercise_number': 2, 'set_number': 3, 'length': 90},
-        {'exercise_number': 2, 'set_number': 4, 'length': 90},
-        {'exercise_number': 3, 'set_number': 1, 'length': 90},
-        {'exercise_number': 3, 'set_number': 2, 'length': 420},
-        {'exercise_number': 3, 'set_number': 3, 'length': 90},
-        {'exercise_number': 4, 'set_number': 1, 'length': 90},
-        {'exercise_number': 4, 'set_number': 2, 'length': 90},
-        {'exercise_number': 5, 'set_number': 1, 'length': 90},
-        {'exercise_number': 5, 'set_number': 2, 'length': 90},
+        {'exercise_label': 'Exr: 1', 'set_label': 'Set: 1', 'length':90},
+        {'exercise_label': 'Exr: 1', 'set_label': 'Set: 2', 'length': 90},
+        {'exercise_label': 'Exr: 1', 'set_label': 'Set: 3', 'length': 90},
+        {'exercise_label': 'Exr: 2', 'set_label': 'Set: 1', 'length': 90},
+        {'exercise_label': 'Exr: 2', 'set_label': 'Set: 2', 'length': 60},
+        {'exercise_label': 'Exr: 2', 'set_label': 'Set: 3', 'length': 90},
+        {'exercise_label': 'Exr: 2', 'set_label': 'Set: 4', 'length': 90},
+        {'exercise_label': 'Exr: 3', 'set_label': 'Set: 1', 'length': 90},
+        {'exercise_label': 'Exr: 3', 'set_label': 'Set: 2', 'length': 420},
+        {'exercise_label': 'Exr: 3', 'set_label': 'Set: 3', 'length': 90},
+        {'exercise_label': 'Exr: 4', 'set_label': 'Set: 1', 'length': 90},
+        {'exercise_label': 'Exr: 4', 'set_label': 'Set: 2', 'length': 90},
+        {'exercise_label': 'Exr: 5', 'set_label': 'Set: 1', 'length': 90},
+        {'exercise_label': 'Exr: 5', 'set_label': 'Set: 2', 'length': 90},
 
 
     ]
+
     prefs = {'exercise_set_lbl_size': 120, 'time_lbl_size': 340 }
 
     WeightRoomTimer(root, script, prefs).pack(fill=tk.BOTH, expand=True)
