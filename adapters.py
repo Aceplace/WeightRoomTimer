@@ -1,5 +1,5 @@
 def get_default_script():
-    return [{'exercise_number': 1, 'set_number': 1, 'length': 60}]
+    return [{'exercise_label': 1, 'set_label': 1, 'length': 60}]
 
 def is_script_editor_script_valid(exercises_and_sets):
     #set is invalid if two exercises appear in a row without any sets or if last item is an exercise without sets
@@ -29,5 +29,8 @@ def to_timer_script(exercises_and_sets):
         else:
             set_number += 1
             length = exercise_or_set
-            timer_script.append({'exercise_number':exercise_number, 'set_number':set_number, 'length':length})
+            timer_script.append({
+                'exercise_label':f'Exr {exercise_number}',
+                'set_label':f'Set {set_number}',
+                'length':length})
     return timer_script
