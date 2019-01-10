@@ -1,4 +1,0 @@
-Package    Version
----------- -------
-pip        10.0.1 
-setuptools 39.0.1 
