@@ -33,34 +33,28 @@ class WeightRoomTimer(tk.Frame):
         #set up parent frame of the labels displaying the period number and time remaining
         lbls_parent_frame = tk.Frame(self)
         lbls_parent_frame.grid(row=1, column=0, columnspan=2, sticky='NSEW')
-        lbls_parent_frame.grid_rowconfigure(0, weight=1)
-        lbls_parent_frame.grid_columnconfigure(1, weight=1)
+        lbls_parent_frame.grid_rowconfigure(2, weight=1)
+        lbls_parent_frame.grid_columnconfigure(2, weight=1)
 
-        #set up the label widget displaying the set number
-        exercise_set_lbl_frame = tk.Frame(lbls_parent_frame)
-        exercise_set_lbl_frame.grid_rowconfigure(1, weight=1)
-        exercise_set_lbl_frame.grid_columnconfigure(1, weight=1)
-        tk.Button(exercise_set_lbl_frame, text='Decrease Excercise/Set Size',
-                  command=self.decrease_exercise_set_lbl_size).grid(row=0, column=0, sticky='NW')
-        tk.Button(exercise_set_lbl_frame, text='Increase Exercise/Set Size',
-                  command=self.increase_exercise_set_lbl_size).grid(row=0, column=1, sticky='NW')
-        self.exercise_lbl = tk.Label(exercise_set_lbl_frame, text='Exr: 1', font=('Times', self.exercise_set_lbl_size))
-        self.exercise_lbl.grid(row=1, column=0, columnspan=2, sticky='SW')
-        self.set_lbl = tk.Label(exercise_set_lbl_frame, text='Set: 1', font=('Times', self.exercise_set_lbl_size))
-        self.set_lbl.grid(row=2, column=0, columnspan=2, sticky='SW')
-        exercise_set_lbl_frame.grid(row=0, column=0, sticky='NSEW')
+        # Set up space for adjusting label size
+        tk.Button(lbls_parent_frame, text='Decrease Excercise/Set Size',
+                  command=self.decrease_exercise_set_lbl_size).grid(row=0, column=0, sticky='W')
+        tk.Button(lbls_parent_frame, text='Increase Exercise/Set Size',
+                  command=self.increase_exercise_set_lbl_size).grid(row=0, column=1, sticky='W')
+        tk.Button(lbls_parent_frame, text='Decrease Time Size',
+                  command=self.decrease_time_lbl_size).grid(row=0, column=2, sticky='E')
+        tk.Button(lbls_parent_frame, text='Increase Time Size',
+                  command=self.increase_time_lbl_size).grid(row=0, column=3, sticky='E')
 
-        #set up the widget displaying the time remaining in period
-        time_lbl_frame = tk.Frame(lbls_parent_frame)
-        time_lbl_frame.grid_rowconfigure(1, weight=1)
-        time_lbl_frame.grid_columnconfigure(0, weight=1)
-        tk.Button(time_lbl_frame, text='Decrease Time Size', command=self.decrease_time_lbl_size).grid(row=0, column=0, sticky='NE')
-        tk.Button(time_lbl_frame, text='Increase Time Size', command=self.increase_time_lbl_size).grid(row=0, column=1, sticky='NE')
+        # Labels for exercise and time remaining
+        self.exercise_lbl = tk.Label(lbls_parent_frame, text='Exr: 1', font=('Times', self.exercise_set_lbl_size))
+        self.exercise_lbl.grid(row=1, column=0, columnspan=4, sticky='W')
+        self.set_lbl = tk.Label(lbls_parent_frame, text='Set: 1', font=('Times', self.exercise_set_lbl_size))
+        self.set_lbl.grid(row=1, column=0, columnspan=4, sticky='E')
         self.time_remaining_in_set = self.script[self.current_set]['length']
-        self.time_lbl = tk.Label(time_lbl_frame, text=seconds_to_minutes_seconds_string(self.time_remaining_in_set),
+        self.time_lbl = tk.Label(lbls_parent_frame, text=seconds_to_minutes_seconds_string(self.time_remaining_in_set),
                                  font=('Times', self.time_lbl_size))
-        self.time_lbl.grid(row=1, column=0, columnspan=2, sticky='SE')
-        time_lbl_frame.grid(row=0, column=1, sticky='NSEW')
+        self.time_lbl.grid(row=2, column=0, columnspan=4, sticky='SE')
 
         #initialize the starting values and sizes of the label widgets
         self.interval_timer_slider.configure(to_=self.time_remaining_in_set - 1)
