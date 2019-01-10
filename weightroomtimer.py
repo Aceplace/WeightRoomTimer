@@ -4,7 +4,7 @@ from utils import seconds_to_minutes_seconds_string
 
 
 class WeightRoomTimer(tk.Frame):
-    def __init__(self, root, script, prefs):
+    def __init__(self, root, script, prefs, layout_option='a'):
         super(WeightRoomTimer, self).__init__(root)
         #Initialize interval timer values and preference values
         self.script = script
@@ -50,7 +50,10 @@ class WeightRoomTimer(tk.Frame):
         self.exercise_lbl = tk.Label(lbls_parent_frame, text='Exr: 1', font=('Times', self.exercise_set_lbl_size))
         self.exercise_lbl.grid(row=1, column=0, columnspan=4, sticky='W')
         self.set_lbl = tk.Label(lbls_parent_frame, text='Set: 1', font=('Times', self.exercise_set_lbl_size))
-        self.set_lbl.grid(row=1, column=0, columnspan=4, sticky='E')
+        if layout_option == 'a':
+            self.set_lbl.grid(row=1, column=0, columnspan=4, sticky='E')
+        else:
+            self.set_lbl.grid(row=2, column=0, columnspan=4, sticky='SW')
         self.time_remaining_in_set = self.script[self.current_set]['length']
         self.time_lbl = tk.Label(lbls_parent_frame, text=seconds_to_minutes_seconds_string(self.time_remaining_in_set),
                                  font=('Times', self.time_lbl_size))
