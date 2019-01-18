@@ -1,21 +1,14 @@
 import json
+import sys
 import os
 import tkinter as tk
+import traceback
 
 from weightroomtimer import WeightRoomTimer
 
-SCHEDULE_DIRECTORY = r'C:\Users\AcePl\Desktop\WRTQuickLaunch'
-
 # Assumes one properly formatted text file in directory
-def get_file_lines():
-    directory_items = os.listdir(SCHEDULE_DIRECTORY)
-    if len(directory_items) != 1:
-        raise Exception('Directory should exactly one item')
-    full_path_name = os.path.join(SCHEDULE_DIRECTORY, directory_items[0])
-    if not os.path.isfile(full_path_name):
-        raise Exception('Directory should only contain one file')
-
-    with open(full_path_name, 'r') as file:
+def get_file_lines(file_path):
+    with open(file_path, 'r') as file:
         lines = file.read().splitlines()
 
     # Clean the list removing blank spaces and white spaces
@@ -50,7 +43,7 @@ def parse_file_lines(lines):
                 script.append(
                     {
                     'exercise_label':current_exercise_name,
-                    'set_label':f'Set {j + 1}',
+                    'set_label':'Set ' + str(j + 1),
                     'length':set_time
                     }
                 )
@@ -61,8 +54,9 @@ def parse_file_lines(lines):
 
 
 def load_prefs():
+    prefs_path = os.path.join(os.path.dirname(os.path.abspath(sys.argv[0])), 'prefs.json')
     try:
-        with open('prefs.json', 'r') as file:
+        with open(prefs_path, 'r') as file:
             json_prefs_dict = json.load(file)
             file.close()
     except (IOError, json.decoder.JSONDecodeError):
@@ -71,23 +65,30 @@ def load_prefs():
 
 
 def save_prefs(prefs_dict):
-    file = open('prefs.json', 'w')
+    prefs_path = os.path.join(os.path.dirname(os.path.abspath(sys.argv[0])), 'prefs.json')
+    file = open(prefs_path, 'w')
     json.dump(prefs_dict, file)
     file.close()
 
 
 if __name__ == '__main__':
-    root = tk.Tk()
+    try:
+        root = tk.Tk()
 
-    prefs = load_prefs()
-    script = parse_file_lines(get_file_lines())
-    weightroom_timer = WeightRoomTimer(root, script, prefs, 'b')
-    weightroom_timer.pack(fill=tk.BOTH, expand=True)
+        prefs = load_prefs()
+        script = parse_file_lines(get_file_lines(sys.argv[1]))
+        weightroom_timer = WeightRoomTimer(root, script, prefs, 'b')
+        weightroom_timer.pack(fill=tk.BOTH, expand=True)
 
-    def on_close():
-        save_prefs(weightroom_timer.get_prefs_as_dict())
-        root.destroy()
 
-    root.state('zoomed')
-    root.protocol('WM_DELETE_WINDOW', on_close)
-    root.mainloop()
+        def on_close():
+            save_prefs(weightroom_timer.get_prefs_as_dict())
+            root.destroy()
+
+        root.state('zoomed')
+        root.protocol('WM_DELETE_WINDOW', on_close)
+        root.mainloop()
+    except:
+        traceback.print_exc()
+        print('Press enter to exit')
+        input()
