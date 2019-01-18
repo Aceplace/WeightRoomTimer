@@ -43,7 +43,7 @@ def parse_file_lines(lines):
                 script.append(
                     {
                     'exercise_label':current_exercise_name,
-                    'set_label':'Set ' + str(j + 1),
+                    'set_label':f'Set {j + 1}',
                     'length':set_time
                     }
                 )
